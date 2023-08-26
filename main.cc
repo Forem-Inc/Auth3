@@ -1,4 +1,5 @@
 #include <drogon/drogon.h>
+#include <clickhouse/client.h>
 
 using namespace drogon;
 
@@ -77,23 +78,30 @@ void user_passport(const HttpRequestPtr &request, Callback &&callback) {
     return;
 }
 
+class AuthV3Server {
+public:
+    int run() {
+        drogon::app().addListener("0.0.0.0",80);
+
+        LOG_INFO << "Server started at 0.0.0.0:80";
+
+        drogon::app()
+        .registerHandler("/create-service", &create_service, {Post});
+        drogon::app()
+        .registerHandler("/login-in-service", &login_at_service, {Post});
+        drogon::app()
+        .registerHandler("/create-user", &create_user, {Post});
+
+        //Load config file
+        drogon::app().loadConfigFile("../config.json");
+        //Run HTTP framework,the method will block in the internal event loop
+        drogon::app().run();
+        return 0;
+    }    
+};
 
 int main() {
-    //Set HTTP listener address and port
-    drogon::app().addListener("0.0.0.0",80);
-
-    LOG_INFO << "Server started at 0.0.0.0:80";
-
-    drogon::app()
-    .registerHandler("/create-service", &create_service, {Post});
-    drogon::app()
-    .registerHandler("/login-in-service", &login_at_service, {Post});
-    drogon::app()
-    .registerHandler("/create-user", &create_user, {Post});
-
-    //Load config file
-    drogon::app().loadConfigFile("../config.json");
-    //Run HTTP framework,the method will block in the internal event loop
-    drogon::app().run();
-    return 0;
+    AuthV3Server server;
+    server.run();
+    
 }

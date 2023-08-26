@@ -11,6 +11,7 @@
         openssl
         zlib
         jsoncpp
-	    drogon
+	      drogon
+        clickhouse
     ];
 }

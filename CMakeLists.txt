@@ -32,6 +32,8 @@ find_package(Drogon CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE Drogon::Drogon)
 
 # ##############################################################################
+add_subdirectory(contribs/clickhouse-cpp)
+
 
 if (CMAKE_CXX_STANDARD LESS 17)
     # With C++14, use boost to support any, string_view and filesystem
@@ -62,6 +64,9 @@ drogon_create_views(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/views
 target_include_directories(${PROJECT_NAME}
                            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
                                    ${CMAKE_CURRENT_SOURCE_DIR}/models)
+
+target_include_directories(${PROJECT_NAME} PRIVATE contribs/clickhouse-cpp/ contribs/clickhouse-cpp/contrib/absl)
+target_link_libraries(${PROJECT_NAME} PRIVATE clickhouse-cpp-lib)
 target_sources(${PROJECT_NAME}
                PRIVATE
                ${SRC_DIR}
