@@ -18,7 +18,6 @@ endif ()
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
 add_executable(${PROJECT_NAME} main.cc)
 
 # ##############################################################################
@@ -33,7 +32,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Drogon::Drogon)
 
 # ##############################################################################
 add_subdirectory(contribs/clickhouse-cpp)
-
+#add_subdirectory(contribs/uuid_v4)
 
 if (CMAKE_CXX_STANDARD LESS 17)
     # With C++14, use boost to support any, string_view and filesystem
